@@ -12,6 +12,10 @@ const userSchema = new mongoose.Schema(
     },
     phone: { type: String, unique: true, sparse: true, trim: true },
     password: { type: String, required: true },
+
+    // Forgot/Reset password fields
+    resetOtp: { type: String },
+    resetOtpExpiry: { type: Date },
   },
   { timestamps: true } // Adds createdAt and updatedAt automatically
 );

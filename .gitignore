@@ -1,0 +1,33 @@
+# Node.js / Express
+node_modules/
+.env
+npm-debug.log
+yarn-error.log
+dist/
+build/
+
+# React / Frontend
+frontend/node_modules/
+frontend/build/
+frontend/.env
+
+# Logs
+logs
+*.log
+*.log.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Misc
+*.bak
+*.tmp

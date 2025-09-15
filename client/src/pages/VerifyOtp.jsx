@@ -12,8 +12,8 @@ const VerifyOtp = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Get email from signup page
   const { email } = location.state || {};
+  const tempUser = JSON.parse(localStorage.getItem("tempUser"));
 
   const handleVerify = async (e) => {
     e.preventDefault();
@@ -32,26 +32,22 @@ const VerifyOtp = () => {
       );
 
       if (response.data.success) {
-        setToast("Signup successful! You can now login.");
-        setToastType("success");
-        setTimeout(() => setToast(""), 8000);
+        showToast("Signup successful! Logging in...", "success");
 
-        localStorage.setItem("user", JSON.stringify({ email: email }));
+        // Save full user after OTP verification
+        localStorage.setItem("user", JSON.stringify(tempUser));
+        localStorage.removeItem("tempUser");
 
-        setTimeout(() => navigate("/login"), 1500);
+        setTimeout(() => navigate("/"), 1500);
       } else {
         setError(response.data.msg || "Invalid OTP");
-        setToast(response.data.msg || "Invalid OTP");
-        setToastType("error");
-        setTimeout(() => setToast(""), 4000);
+        showToast(response.data.msg || "Invalid OTP", "error");
       }
     } catch (err) {
       const msg =
         err.response?.data?.msg || "Something went wrong. Please try again.";
       setError(msg);
-      setToast(msg);
-      setToastType("error");
-      setTimeout(() => setToast(""), 8000);
+      showToast(msg, "error");
     } finally {
       setLoading(false);
     }
@@ -65,18 +61,18 @@ const VerifyOtp = () => {
       await axios.post("http://localhost:5000/api/auth/otp/resend-otp", {
         email,
       });
-      setToast(`OTP resent successfully to ${email}`);
-      setToastType("success");
-      setTimeout(() => setToast(""), 4000);
-    } catch (err) {
-      const msg = "Failed to resend OTP. Try again later.";
-      setError(msg);
-      setToast(msg);
-      setToastType("error");
-      setTimeout(() => setToast(""), 4000);
+      showToast(`OTP resent to ${email}`, "success");
+    } catch {
+      showToast("Failed to resend OTP", "error");
     } finally {
       setLoading(false);
     }
+  };
+
+  const showToast = (msg, type = "success") => {
+    setToast(msg);
+    setToastType(type);
+    setTimeout(() => setToast(""), 4000);
   };
 
   return (

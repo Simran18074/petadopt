@@ -2,8 +2,10 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import authRoutes from "./routes/authRoutes.js";
-import otpRoutes from "./routes/otpRoutes.js";
+
+// Routes
+import authRoutes from "./routes/authRoutes.js"; // login, signup, OTP
+import passwordRoutes from "./routes/passwordRoutes.js"; // forgot & reset password
 
 dotenv.config();
 
@@ -15,8 +17,13 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use("/api/auth", authRoutes); // login route
-app.use("/api/auth/otp", otpRoutes); // signup + OTP routes
+app.use("/api/auth", authRoutes); // login / signup / OTP
+app.use("/api/auth/password", passwordRoutes); // forgot / reset password
+
+// Optional root route
+app.get("/", (req, res) => {
+  res.send("Server is running...");
+});
 
 // Connect to MongoDB
 mongoose
@@ -30,8 +37,3 @@ mongoose
   .catch((err) => {
     console.error("MongoDB connection error:", err);
   });
-
-// Optional root route
-app.get("/", (req, res) => {
-  res.send("Server is running...");
-});

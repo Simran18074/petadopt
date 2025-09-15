@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Toast from "../components/Toast"; // Make sure this path is correct
+import Toast from "../components/Toast";
 
 const Signup = () => {
   const [fullName, setFullName] = useState("");
@@ -16,7 +16,6 @@ const Signup = () => {
 
   const navigate = useNavigate();
 
-  // Form validation
   const isFormValid =
     fullName.trim() &&
     phone.trim() &&
@@ -25,10 +24,10 @@ const Signup = () => {
     confirmPassword.trim() &&
     password === confirmPassword;
 
-  const showToast = (message, type = "success") => {
-    setToast(message);
+  const showToast = (msg, type = "success") => {
+    setToast(msg);
     setToastType(type);
-    setTimeout(() => setToast(""), 10000); // 10 seconds
+    setTimeout(() => setToast(""), 8000);
   };
 
   const handleSignup = async (e) => {
@@ -45,10 +44,13 @@ const Signup = () => {
       );
 
       if (response.data.success) {
-        showToast(
-          `OTP has been sent to ${email}. Check your email.`,
-          "success"
+        // Save temp user in localStorage for OTP verification
+        localStorage.setItem(
+          "tempUser",
+          JSON.stringify({ name: fullName, phone, email, password })
         );
+
+        showToast(`OTP sent to ${email}`, "success");
         setTimeout(() => navigate("/verify-otp", { state: { email } }), 800);
       } else {
         setError(response.data.msg || "Failed to send OTP");
