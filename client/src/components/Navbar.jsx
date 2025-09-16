@@ -14,49 +14,41 @@ const Navbar = () => {
     setUser(loggedInUser);
   }, []);
 
-  // Scroll to section on hash change
+  // Scroll highlight for home page only
   useEffect(() => {
-    if (location.hash) {
-      const id = location.hash.replace("#", "");
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-        setActiveSection(id);
-      }
+    if (location.pathname === "/") {
+      const handleScroll = () => {
+        const sections = ["home", "about", "contact"];
+        let current = "home";
+        sections.forEach((id) => {
+          const section = document.getElementById(id);
+          if (section) {
+            const top = section.getBoundingClientRect().top;
+            if (top <= 80) current = id; // offset for sticky navbar
+          }
+        });
+        setActiveSection(current);
+      };
+
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
     }
-  }, [location]);
+  }, [location.pathname]);
 
-  // Highlight navbar link while scrolling
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ["home", "about", "adopt", "contact"];
-      let current = "home";
-      sections.forEach((id) => {
-        const section = document.getElementById(id);
-        if (section) {
-          const top = section.getBoundingClientRect().top;
-          if (top <= 80) current = id; // offset for sticky navbar
-        }
-      });
-      setActiveSection(current);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Navigate to section
+  // Handle navbar click (scroll or navigate)
   const handleNavClick = (id) => {
-    if (location.pathname !== "/") {
-      // If not on home, go to home page first with hash
-      navigate(`/#${id}`);
+    if (id === "adopt") {
+      navigate("/adopt");
+      setActiveSection("adopt");
     } else {
-      // If already on home, scroll smoothly
-      const element = document.getElementById(id);
-      if (element) element.scrollIntoView({ behavior: "smooth" });
-      setActiveSection(id);
-      // Update URL hash without reloading
-      window.history.replaceState(null, "", `#${id}`);
+      if (location.pathname !== "/") {
+        navigate(`/#${id}`);
+      } else {
+        const element = document.getElementById(id);
+        if (element) element.scrollIntoView({ behavior: "smooth" });
+        setActiveSection(id);
+        window.history.replaceState(null, "", `#${id}`);
+      }
     }
   };
 

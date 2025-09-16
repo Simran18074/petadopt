@@ -8,6 +8,7 @@ import VerifyOtp from "./pages/VerifyOtp";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/Profile";
+import Adopt from "./pages/Adopt"; // ⬅️ NEW
 import Navbar from "./components/Navbar";
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/adopt" element={<Adopt />} /> {/* ⬅️ NEW ROUTE */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />

@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 // Routes
 import authRoutes from "./routes/authRoutes.js"; // login, signup, OTP
 import passwordRoutes from "./routes/passwordRoutes.js"; // forgot & reset password
+import petRoutes from "./routes/petRoutes.js"; // 🐾 pets adopt routes
 
 dotenv.config();
 
@@ -17,8 +18,9 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use("/api/auth", authRoutes); // login / signup / OTP
-app.use("/api/auth/password", passwordRoutes); // forgot / reset password
+app.use("/api/auth", authRoutes); 
+app.use("/api/auth/password", passwordRoutes); 
+app.use("/api/pets", petRoutes);
 
 // Optional root route
 app.get("/", (req, res) => {
@@ -29,11 +31,11 @@ app.get("/", (req, res) => {
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log("MongoDB connected");
+    console.log("✅ MongoDB connected");
     app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
     });
   })
   .catch((err) => {
-    console.error("MongoDB connection error:", err);
+    console.error("❌ MongoDB connection error:", err);
   });
